@@ -1,5 +1,5 @@
 # GoLand
-idea/
+.idea/
 
 # Environment Variables
 .env
