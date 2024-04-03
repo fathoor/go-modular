@@ -13,7 +13,7 @@ type Validator struct {
 
 func NewValidator() *Validator {
 	return &Validator{
-		Validator: validator.New(),
+		Validator: validator.New(validator.WithRequiredStructEnabled()),
 	}
 }
 

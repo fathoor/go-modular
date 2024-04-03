@@ -9,7 +9,7 @@ import (
 
 func NewPostgres(cfg *Config) *sqlx.DB {
 	var (
-		dsn          = cfg.Get("DB_DSN", "postgres://user:password@localhost:5432/postgres?sslmode=disable&TimeZone=Asia/Jakarta")
+		dsn          = cfg.Get("DB_DSN", "postgres://user:password@localhost:5432/postgres")
 		connOpen     = cfg.GetInt("DB_CONN_OPEN", 100)
 		connIdle     = cfg.GetInt("DB_CONN_IDLE", 10)
 		connLifeTime = cfg.GetInt("DB_CONN_LIFETIME", 15)
