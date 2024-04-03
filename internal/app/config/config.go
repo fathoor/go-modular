@@ -9,6 +9,10 @@ import (
 type Config struct {
 }
 
+func NewConfig() *Config {
+	return &Config{}
+}
+
 func (c *Config) Get(key, def string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
@@ -19,14 +23,11 @@ func (c *Config) Get(key, def string) string {
 }
 
 func (c *Config) GetInt(key string, def int) int {
-	if value, err := strconv.Atoi(os.Getenv(key)); err != nil {
-		return value
+	value, err := strconv.Atoi(os.Getenv(key))
+	if err != nil {
+		log.Printf("Failed to parse %s to int, using default value: %d", key, def)
+		return def
 	}
 
-	log.Printf("Failed to parse %s to int, using default value: %d", key, def)
-	return def
-}
-
-func NewConfig() *Config {
-	return &Config{}
+	return value
 }
