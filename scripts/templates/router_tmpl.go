@@ -7,7 +7,10 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func Route(app *fiber.App, controller *controller.{{.Name}}Controller) {
+func Route(
+	app *fiber.App,
+	controller *controller.{{.Name}}Controller,
+) {
 	_ = app.Group("/v1/{{.ModuleName}}")
 	{}
 }
