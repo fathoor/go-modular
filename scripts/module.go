@@ -5,18 +5,28 @@ import (
 	"github.com/fathoor/go-modular/scripts/templates"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+	"log"
 	"os"
+	"os/exec"
 	"path"
+	"strings"
 	"text/template"
 )
 
 func main() {
-	// Check if module name is provided
+	// Ensure module name is provided
 	if len(os.Args) < 2 {
 		println("Usage: go run scripts/module.go <module name>")
 		return
 	}
 
+	cmd := exec.Command("go", "list", "-m")
+	out, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("Failed to obtain module: %v\n", err)
+	}
+
+	pkg := strings.TrimSpace(string(out))
 	module := os.Args[1]
 	modulePath := fmt.Sprintf("internal/modules/%s", module)
 
@@ -30,7 +40,6 @@ func main() {
 		path.Join(modulePath, "internal/usecase"),
 		path.Join(modulePath, "internal/controller"),
 		path.Join(modulePath, "internal/router"),
-		path.Join(modulePath, "internal/middleware"),
 	}
 
 	for _, directory := range directories {
@@ -43,14 +52,8 @@ func main() {
 
 	// Initialize module files
 	files := map[string]string{
-		path.Join(modulePath, "internal/entity", fmt.Sprintf("%s.go", module)):                              templates.EntityTmpl,
-		path.Join(modulePath, "internal/model", fmt.Sprintf("%s_model.go", module)):                         templates.ModelTmpl,
-		path.Join(modulePath, "internal/repository", fmt.Sprintf("%s_repository.go", module)):               templates.RepositoryTmpl,
-		path.Join(modulePath, "internal/repository/postgres", fmt.Sprintf("%s_repository_impl.go", module)): templates.PostgresTmpl,
-		path.Join(modulePath, "internal/usecase", fmt.Sprintf("%s_usecase.go", module)):                     templates.UsecaseTmpl,
-		path.Join(modulePath, "internal/controller", fmt.Sprintf("%s_controller.go", module)):               templates.ControllerTmpl,
-		path.Join(modulePath, "internal/router", "router.go"):                                               templates.RouterTmpl,
-		path.Join(modulePath, fmt.Sprintf("%s.go", module)):                                                 templates.ProviderTmpl,
+		path.Join(modulePath, "internal/router", "router.go"): templates.RouterTmpl,
+		path.Join(modulePath, fmt.Sprintf("%s.go", module)):   templates.ProviderTmpl,
 	}
 
 	for file, content := range files {
@@ -68,15 +71,16 @@ func main() {
 		defer f.Close()
 
 		data := struct {
+			Package    string
 			ModuleName string
 			Name       string
 		}{
+			Package:    pkg,
 			ModuleName: module,
 			Name:       cases.Title(language.Indonesian).String(module),
 		}
 
-		err = tmpl.Execute(f, data)
-		if err != nil {
+		if err = tmpl.Execute(f, data); err != nil {
 			fmt.Printf("Failed to execute template %s: %v\n", file, err)
 			return
 		}
