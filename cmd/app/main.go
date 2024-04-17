@@ -5,6 +5,7 @@ import (
 	"github.com/fathoor/go-modular/internal/app/config"
 	"github.com/fathoor/go-modular/internal/app/provider"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/joho/godotenv/autoload"
 	"log"
 )
 
