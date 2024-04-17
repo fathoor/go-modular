@@ -16,10 +16,13 @@ It uses the following major libraries:
 
 ## Usage
 
+Make sure to refactor the go module in `go.mod` with your corresponding module.
+
 A `.env.example` file is provided in the root directory. Copy it to `.env` and adjust the values to your needs.
 
 ```bash
 # App
+APP_DEBUG=
 APP_PORT=
 
 # Database
@@ -33,6 +36,12 @@ To initialize new modules, run the following command:
 
 ```bash
 go run scripts/module.go <module name>
+```
+
+To initialize new submodules, run the following command:
+
+```bash
+go run scripts/submodule.go <module name> <submodule name>
 ```
 
 To run the app, execute the following command:
