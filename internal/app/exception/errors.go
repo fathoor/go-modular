@@ -1,6 +1,11 @@
 package exception
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+)
 
 type (
 	BadRequestError     struct{ Message string }
@@ -33,12 +38,12 @@ func (e *InternalServerError) Error() string {
 
 func PanicIfError(err error, ctx ...string) {
 	if err != nil {
-		if err.Error() == "record not found" {
-			panic(&NotFoundError{
-				Message: "Data not found",
+		if debug, _ := strconv.ParseBool(os.Getenv("APP_DEBUG")); debug {
+			panic(&InternalServerError{
+				Message: fmt.Sprintf("%v %v", ctx, err),
 			})
 		} else {
-			log.Printf("Error: %v %v", ctx, err)
+			log.Printf("%v %v", ctx, err)
 			panic(&InternalServerError{
 				Message: "Internal Server Error",
 			})

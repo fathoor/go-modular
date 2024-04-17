@@ -31,3 +31,13 @@ func (c *Config) GetInt(key string, def int) int {
 
 	return value
 }
+
+func (c *Config) GetBool(key string, def bool) bool {
+	value, err := strconv.ParseBool(os.Getenv(key))
+	if err != nil {
+		log.Printf("Failed to parse %s to bool, using default value: %t", key, def)
+		return def
+	}
+
+	return value
+}

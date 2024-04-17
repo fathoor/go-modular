@@ -2,7 +2,7 @@ package provider
 
 import (
 	"github.com/fathoor/go-modular/internal/app/config"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 )
 

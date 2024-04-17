@@ -3,10 +3,10 @@ package exception
 import (
 	"errors"
 	"github.com/fathoor/go-modular/internal/app/model"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
-func Handler(ctx fiber.Ctx, err error) error {
+func Handler(ctx *fiber.Ctx, err error) error {
 	var (
 		badRequestError     *BadRequestError
 		unauthorizedError   *UnauthorizedError
